@@ -26,9 +26,18 @@ export function PaymentStatus() {
   const [status, setStatus] = useState<PaymentStatusType>("LOADING")
   const [copied, setCopied] = useState(false)
   const [timeLeft, setTimeLeft] = useState<string>("")
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Load payment data from sessionStorage
   useEffect(() => {
+    if (!mounted) return
+
+    if (typeof window === "undefined") return
+
     const stored = sessionStorage.getItem("paymentData")
     if (stored) {
       const data = JSON.parse(stored) as PaymentData
@@ -40,7 +49,7 @@ export function PaymentStatus() {
     } else {
       router.push("/checkout")
     }
-  }, [transactionId])
+  }, [transactionId, mounted])
 
   // Check payment status periodically
   const checkPaymentStatus = useCallback(async () => {
@@ -75,6 +84,7 @@ export function PaymentStatus() {
   // Countdown timer
   useEffect(() => {
     if (!paymentData?.expirationDate || status !== "WAITING_PAYMENT") return
+    if (typeof window === "undefined") return
 
     const updateTimer = () => {
       const now = new Date().getTime()
@@ -103,6 +113,7 @@ export function PaymentStatus() {
 
   const copyPixCode = async () => {
     if (!paymentData?.pixCode) return
+    if (typeof window === "undefined") return
 
     try {
       await navigator.clipboard.writeText(paymentData.pixCode)
