@@ -172,7 +172,8 @@ export function CheckoutForm() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao criar pagamento")
+        console.error("[v0] Payment error:", data)
+        throw new Error(data.error || `Erro ao criar pagamento (status: ${response.status})`)
       }
 
       // Store payment data in sessionStorage for the payment page
@@ -403,7 +404,7 @@ export function CheckoutForm() {
           <div className="flex items-center gap-4 p-4 bg-secondary/50 rounded-xl border-2 border-primary">
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
               <svg viewBox="0 0 512 512" className="w-7 h-7 text-primary" fill="currentColor">
-                <path d="M242.4 292.5C247.8 287.1 257.1 287.1 262.5 292.5L339.5 369.5C353.7 383.7 googletag.cmd.push(function() {googletag.display('div-gpt-ad-1541767382498-4');});344.9 googletag.cmd.push(function() {googletag.display('div-gpt-ad-1541767382498-4');});407.1 googletag.cmd.push(function() {googletag.display('div-gpt-ad-1541767382498-4');});330.9 407.1C316.7 421.3 294.3 421.3 280.1 407.1L242.4 369.5C237 364.1 237 354.8 242.4 349.5L269.9 322H192C174.3 322 160 307.7 160 290V222C160 204.3 174.3 190 192 190H320C337.7 190 352 204.3 352 222V290C352 307.7 337.7 322 320 322H294.1L262.5 292.5C257.1 287.1 247.8 287.1 242.4 292.5z" />
+                <path d="M242.4 292.5C247.8 287.1 257.1 287.1 262.5 292.5L339.5 369.5C353.7 383.7 344.9 407.1 407.1 407.1C316.7 421.3 294.3 421.3 280.1 407.1L242.4 369.5C237 364.1 237 354.8 242.4 349.5L269.9 322H192C174.3 322 160 307.7 160 290V222C160 204.3 174.3 190 192 190H320C337.7 190 352 204.3 352 222V290C352 307.7 337.7 322 320 322H294.1L262.5 292.5C257.1 287.1 247.8 287.1 242.4 292.5z" />
               </svg>
             </div>
             <div className="flex-1">
