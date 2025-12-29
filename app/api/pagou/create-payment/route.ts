@@ -32,8 +32,13 @@ interface PaymentRequest {
 }
 
 export async function POST(request: Request) {
+  console.log("[v0] === PAGOU PAYMENT API CALLED ===")
+
   try {
     const PAGOU_SECRET_KEY = process.env.PAGOU_SECRET_KEY
+
+    console.log("[v0] PAGOU_SECRET_KEY exists:", !!PAGOU_SECRET_KEY)
+    console.log("[v0] PAGOU_SECRET_KEY first 10 chars:", PAGOU_SECRET_KEY?.substring(0, 10))
 
     if (!PAGOU_SECRET_KEY) {
       console.error("[v0] PAGOU_SECRET_KEY is not configured")
@@ -44,6 +49,7 @@ export async function POST(request: Request) {
     }
 
     const body: PaymentRequest = await request.json()
+    console.log("[v0] Request body received:", JSON.stringify(body, null, 2))
 
     // Generate unique external ID for this transaction
     const externalId = `order-${Date.now()}-${Math.random().toString(36).substring(7)}`
@@ -75,17 +81,24 @@ export async function POST(request: Request) {
       },
     }
 
-    // Make request to Pagou AI API from server-side
+    console.log("[v0] Pagou AI request payload:", JSON.stringify(paymentBody, null, 2))
+    console.log("[v0] Making request to:", PAGOU_API_URL)
+
     const response = await fetch(PAGOU_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
         apiKey: PAGOU_SECRET_KEY,
       },
       body: JSON.stringify(paymentBody),
     })
 
+    console.log("[v0] Pagou AI response status:", response.status)
+    console.log("[v0] Pagou AI response headers:", Object.fromEntries(response.headers.entries()))
+
     const responseText = await response.text()
+    console.log("[v0] Pagou AI raw response:", responseText)
 
     let data
     try {
@@ -102,6 +115,8 @@ export async function POST(request: Request) {
         { status: response.status },
       )
     }
+
+    console.log("[v0] Payment created successfully:", data)
 
     // Return payment data to client
     return NextResponse.json({
