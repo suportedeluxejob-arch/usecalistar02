@@ -83,13 +83,14 @@ export async function POST(request: Request) {
 
     console.log("[v0] Pagou AI request payload:", JSON.stringify(paymentBody, null, 2))
     console.log("[v0] Making request to:", PAGOU_API_URL)
+    console.log("[v0] Auth header being sent - X-API-Key:", PAGOU_SECRET_KEY?.substring(0, 15) + "...")
 
     const response = await fetch(PAGOU_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "X-API-Key": PAGOU_SECRET_KEY,
+        "x-api-key": PAGOU_SECRET_KEY,
       },
       body: JSON.stringify(paymentBody),
     })
