@@ -21,7 +21,7 @@ export async function GET(request: Request) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        apiKey: PAGOU_SECRET_KEY,
+        Authorization: `Bearer ${PAGOU_SECRET_KEY}`,
       },
     })
 

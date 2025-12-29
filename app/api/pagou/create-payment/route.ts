@@ -89,7 +89,7 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        apiKey: PAGOU_SECRET_KEY,
+        Authorization: `Bearer ${PAGOU_SECRET_KEY}`,
       },
       body: JSON.stringify(paymentBody),
     })
